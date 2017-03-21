@@ -157,17 +157,17 @@ public class AddContent extends Activity implements OnClickListener {
 
     public void addDB() {
         ContentValues cv = new ContentValues();
-        cv.put(notesDB.CONTENT, ettext.getText().toString());
-        cv.put(notesDB.TIME, getTime());
-        cv.put(notesDB.PATH, phoneFile + "");
-        cv.put(notesDB.VIDEO, videoFile + "");
-        dbwriter.insert(notesDB.TABLE_NAME, null, cv);
+        cv.put(NotesDB.CONTENT, ettext.getText().toString());
+        cv.put(NotesDB.TIME, getTime());
+        cv.put(NotesDB.PATH, phoneFile + "");
+        cv.put(NotesDB.VIDEO, videoFile + "");
+        dbwriter.insert(NotesDB.TABLE_NAME, null, cv);
     }
 
     public String getTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
+        SimpleDateFormat sformat = new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
-        String str = format.format(date);
+        String str = sformat.format(date);
         return str;
     }
 
