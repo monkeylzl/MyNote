@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-   <!-- <uses-permission android:name="android.permission.GET_TASKS" />-->
+    <!-- <uses-permission android:name="android.permission.GET_TASKS" />-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -31,41 +31,57 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.lzl.mynote.AddContent"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.example.lzl.mynote.SelectAct"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.example.lzl.mynote.Share"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-    <activity
-        android:name="com.example.lzl.mynote.AddContent"
-        android:screenOrientation="portrait" >
-    </activity>
-    <activity
-        android:name="com.example.lzl.mynote.SelectAct"
-        android:screenOrientation="portrait" >
-    </activity>
-    <activity
-        android:name="com.example.lzl.mynote.Share"
-        android:screenOrientation="portrait" >
-    </activity>
-   <!-- <activity
-        android:name="com.mob.tools.MobUIShell"
-        android:configChanges="keyboardHidden|orientation|screenSize"
-        android:screenOrientation="portrait"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar"
-        android:windowSoftInputMode="stateHidden|adjustResize" >
-        <intent-filter>
-            <data android:scheme="tencent100371282" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-            <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="tencent你的AppId" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.tencent.connect.common.AssistActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+        <!--       <activity
+                   android:name="com.example.lzl.mynote.SharePopupWindow"
+                   android:screenOrientation="portrait"></activity>-->
+        <!-- <activity
+             android:name="com.mob.tools.MobUIShell"
+             android:configChanges="keyboardHidden|orientation|screenSize"
+             android:screenOrientation="portrait"
+             android:theme="@android:style/Theme.Translucent.NoTitleBar"
+             android:windowSoftInputMode="stateHidden|adjustResize" >
+             <intent-filter>
+                 <data android:scheme="tencent100371282" />
 
-            <category android:name="android.intent.category.BROWSABLE" />
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-    </activity>
-    &lt;!&ndash; 微信分享回调 &ndash;&gt;
-    <activity
-        android:name=".wxapi.WXEntryActivity"
-        android:configChanges="keyboardHidden|orientation|screenSize"
-        android:exported="true"
-        android:screenOrientation="portrait"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
+                 <action android:name="android.intent.action.VIEW" />
+
+                 <category android:name="android.intent.category.BROWSABLE" />
+                 <category android:name="android.intent.category.DEFAULT" />
+             </intent-filter>
+         </activity>
+         &lt;!&ndash; 微信分享回调 &ndash;&gt;
+         <activity
+             android:name=".wxapi.WXEntryActivity"
+             android:configChanges="keyboardHidden|orientation|screenSize"
+             android:exported="true"
+             android:screenOrientation="portrait"
+             android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
 
     </application>
 

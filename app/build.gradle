@@ -28,4 +28,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     //    compile 'com.android.support:appcompat-v7:25.2.0'
     compile files('libs/Baidu_OAuth_SDK_Android_G-2.0.0.0.jar')
+    compile files('libs/mta-sdk-1.6.2.jar')
 }

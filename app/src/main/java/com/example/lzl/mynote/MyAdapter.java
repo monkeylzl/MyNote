@@ -14,9 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-/**
- * Created by lzl on 2017/3/21.
- */
+
 
 public class MyAdapter extends BaseAdapter {
 

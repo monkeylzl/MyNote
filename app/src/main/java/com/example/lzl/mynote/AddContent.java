@@ -10,21 +10,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.baidu.oauth.BaiduOAuth;
-import com.baidu.oauth.BaiduOAuth.BaiduOAuthResponse;
+import com.tencent.tauth.Tencent;
 
 import java.io.File;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+
+import static android.provider.UserDictionary.Words.APP_ID;
 
 
 public class AddContent extends Activity implements OnClickListener {
@@ -40,6 +41,9 @@ public class AddContent extends Activity implements OnClickListener {
     private SQLiteDatabase dbwriter;
     private File phoneFile, videoFile; // 用于照片的存储
     private final String mbApiKey = "rsOjYx5cit50eGrxy5c9682n";
+    private SharePopupWindow menuWindow;
+    private PopupWindow mPopupWindow;
+    private Tencent mTencent;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,28 +61,12 @@ public class AddContent extends Activity implements OnClickListener {
         notesDB = new NotesDB(this);
         dbwriter = notesDB.getWritableDatabase();
         initView();
-//		// 引入窗口配置文件
-//		shareView = LayoutInflater.from(this).inflate(
-//				R.layout.share, null);
-//		// 创建PopupWindow对象
-//		pop = new PopupWindow(shareView, LayoutParams.MATCH_PARENT,
-//				LayoutParams.WRAP_CONTENT, false);
-//		// 需要设置一下此参数，点击外边可消失
-//		pop.setBackgroundDrawable(new ColorDrawable());
-//		// 设置点击窗口外边窗口消失
-//		pop.setOutsideTouchable(true);
-//		pop.setAnimationStyle(R.style.MyDialogStyle);
-//		// 设置此参数获得焦点，否则无法点击
-//		pop.setFocusable(true);
-//		pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//
-//			@Override
-//			public void onDismiss() {
-//				ShareSDK.stopSDK(ProductActivity.this);
-//
-//			}
-//		});
-
+        // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
+        // 其中APP_ID是分配给第三方应用的appid，类型为String。
+        mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
+        // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
+        // 初始化视图
+        initViews();
     }
 
     public void initView() {
@@ -118,42 +106,47 @@ public class AddContent extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.share:
+                menuWindow = new SharePopupWindow(AddContent.this, itemsOnClick);
+                menuWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
 
-                BaiduOAuth oauthClient = new BaiduOAuth();
-                oauthClient.startOAuth(AddContent.this, mbApiKey, new String[]{"basic"},new BaiduOAuth.OAuthListener() {
-                    @Override
-                    public void onException(String msg) {
-                        Toast.makeText(getApplicationContext(), "Login failed " + msg, Toast.LENGTH_SHORT).show();
-                    }
-                    @Override
-                    public void onComplete(BaiduOAuthResponse response) {
-                        if(null != response){
-                            String accessToken = response.getAccessToken();
-                            Toast.makeText(getApplicationContext(), "Token: " + accessToken + "    User name:" + response.getUserName(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(getApplicationContext(), "Login cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-//            if (pop != null && !pop.isShowing()) {
-//                pop.showAtLocation(view.getRootView(), Gravity.BOTTOM, 0, 0);
-//            }
-//            break;
-
-//               case R.id.btn_cancel:
-//            if (pop != null && pop.isShowing()) {
-//                pop.dismiss();
-//            }
-//            break;
-
-//			Intent ishare = new Intent(AddContent.this, Share.class);
-//			startActivity(ishare);
+//                BaiduOAuth oauthClient = new BaiduOAuth();
+//                oauthClient.startOAuth(AddContent.this, mbApiKey, new String[]{"basic"},new BaiduOAuth.OAuthListener() {
+//                    @Override
+//                    public void onException(String msg) {
+//                        Toast.makeText(getApplicationContext(), "Login failed " + msg, Toast.LENGTH_SHORT).show();
+//                    }
+//                    @Override
+//                    public void onComplete(BaiduOAuthResponse response) {
+//                        if(null != response){
+//                            String accessToken = response.getAccessToken();
+//                            Toast.makeText(getApplicationContext(), "Token: " + accessToken + "    User name:" + response.getUserName(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                    @Override
+//                    public void onCancel() {
+//                        Toast.makeText(getApplicationContext(), "Login cancelled", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
         }
 
     }
+
+    private OnClickListener itemsOnClick = new OnClickListener() {
+
+        public void onClick(View v) {
+//            menuWindow.dismiss();
+            switch (v.getId()) {
+                case R.id.qq:
+                    menuWindow.dismiss();
+                    // case R.id.btn_pick_photo:
+                    // break;
+                    // default:
+                    // break;
+            }
+
+        }
+
+    };
 
     public void addDB() {
         ContentValues cv = new ContentValues();
