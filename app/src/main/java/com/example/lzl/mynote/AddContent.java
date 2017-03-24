@@ -17,15 +17,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.tencent.connect.share.QQShare;
+import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 
 import java.io.File;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-
-import static android.provider.UserDictionary.Words.APP_ID;
 
 
 public class AddContent extends Activity implements OnClickListener {
@@ -44,6 +46,7 @@ public class AddContent extends Activity implements OnClickListener {
     private SharePopupWindow menuWindow;
     private PopupWindow mPopupWindow;
     private Tencent mTencent;
+    private static final String mAppid = "1105984165";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,14 +63,13 @@ public class AddContent extends Activity implements OnClickListener {
         sharebtn.setOnClickListener(this);
         notesDB = new NotesDB(this);
         dbwriter = notesDB.getWritableDatabase();
+
+        if (mTencent == null) {
+            mTencent = Tencent.createInstance(mAppid, this);
+        }
         initView();
-        // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
-        // 其中APP_ID是分配给第三方应用的appid，类型为String。
-        mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
-        // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
-        // 初始化视图
-        initViews();
     }
+
 
     public void initView() {
         if (val.equals("1")) {
@@ -109,6 +111,66 @@ public class AddContent extends Activity implements OnClickListener {
                 menuWindow = new SharePopupWindow(AddContent.this, itemsOnClick);
                 menuWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
 
+                final Bundle params = new Bundle();
+                params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+                params.putString(QQShare.SHARE_TO_QQ_TITLE, "要分享的标题");
+                params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "要分享的摘要");
+                params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://www.qq.com/news/1.html");
+                params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
+                params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "测试应用222222");
+                params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN);
+                mTencent.shareToQQ(AddContent.this, params, new BaseUiListener());
+                break;
+//            // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
+//            // 其中APP_ID是分配给第三方应用的appid，类型为String。
+//
+//
+//            // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
+//            // 初始化视图
+//        public void shareOnlyImageOnQQ (View v){
+//            final Bundle params = new Bundle();
+//            params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, Environment.getExternalStorageDirectory().getAbsolutePath().concat("/a.png"));
+//            params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "测试应用");
+//            params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
+////        params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN); //打开这句话，可以实现分享纯图到QQ空间
+//
+//            doShareToQQ(params);
+//        }
+//
+//
+//        private void doShareToQQ ( final Bundle params){
+//            // QQ分享要在主线程做
+//            ThreadManager.getMainHandler().post(new Runnable() {
+//
+//                @Override
+//                public void run() {
+//                    if (null != mTencent) {
+//                        mTencent.shareToQQ(AddContent.this, params, qqShareListener);
+//                    }
+//                }
+//            });
+//        }
+//
+//        IUiListener qqShareListener = new IUiListener() {
+//            @Override
+//            public void onCancel() {
+//                Util.toastMessage(AddContent.this, "onCancel: ");
+//            }
+//
+//            @Override
+//            public void onComplete(Object response) {
+//                // TODO Auto-generated method stub
+//                Util.toastMessage(AddContent.this, "onComplete: " + response.toString());
+//            }
+//
+//            @Override
+//            public void onError(UiError e) {
+//                // TODO Auto-generated method stub
+//                Util.toastMessage(AddContent.this, "onError: " + e.errorMessage, "e");
+//            }
+//        };
+//                initViews();
+
 //                BaiduOAuth oauthClient = new BaiduOAuth();
 //                oauthClient.startOAuth(AddContent.this, mbApiKey, new String[]{"basic"},new BaiduOAuth.OAuthListener() {
 //                    @Override
@@ -129,6 +191,24 @@ public class AddContent extends Activity implements OnClickListener {
 //                });
         }
 
+    }
+
+
+    private class BaseUiListener implements IUiListener {
+        @Override
+        public void onComplete(Object o) {
+            Toast.makeText(AddContent.this, "onComplete", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onError(UiError uiError) {
+            Toast.makeText(AddContent.this, "onError", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onCancel() {
+            Toast.makeText(AddContent.this, "onCancel", Toast.LENGTH_LONG).show();
+        }
     }
 
     private OnClickListener itemsOnClick = new OnClickListener() {
@@ -176,6 +256,8 @@ public class AddContent extends Activity implements OnClickListener {
             c_video.setVideoURI(Uri.fromFile(videoFile));
             c_video.start();
         }
+        mTencent.onActivityResult(requestCode, resultCode, data);
+
     }
 
 }
