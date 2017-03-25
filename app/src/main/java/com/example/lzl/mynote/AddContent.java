@@ -20,7 +20,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.tencent.connect.share.QQShare;
+import com.tencent.open.GameAppOperation;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -63,7 +63,8 @@ public class AddContent extends Activity implements OnClickListener {
         sharebtn.setOnClickListener(this);
         notesDB = new NotesDB(this);
         dbwriter = notesDB.getWritableDatabase();
-
+//      Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
+//      其中APP_ID是分配给第三方应用的appid，类型为String。
         if (mTencent == null) {
             mTencent = Tencent.createInstance(mAppid, this);
         }
@@ -111,66 +112,6 @@ public class AddContent extends Activity implements OnClickListener {
                 menuWindow = new SharePopupWindow(AddContent.this, itemsOnClick);
                 menuWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
 
-                final Bundle params = new Bundle();
-                params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-                params.putString(QQShare.SHARE_TO_QQ_TITLE, "要分享的标题");
-                params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "要分享的摘要");
-                params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://www.qq.com/news/1.html");
-                params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
-                params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "测试应用222222");
-                params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN);
-                mTencent.shareToQQ(AddContent.this, params, new BaseUiListener());
-                break;
-//            // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
-//            // 其中APP_ID是分配给第三方应用的appid，类型为String。
-//
-//
-//            // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
-//            // 初始化视图
-//        public void shareOnlyImageOnQQ (View v){
-//            final Bundle params = new Bundle();
-//            params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, Environment.getExternalStorageDirectory().getAbsolutePath().concat("/a.png"));
-//            params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "测试应用");
-//            params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
-////        params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN); //打开这句话，可以实现分享纯图到QQ空间
-//
-//            doShareToQQ(params);
-//        }
-//
-//
-//        private void doShareToQQ ( final Bundle params){
-//            // QQ分享要在主线程做
-//            ThreadManager.getMainHandler().post(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//                    if (null != mTencent) {
-//                        mTencent.shareToQQ(AddContent.this, params, qqShareListener);
-//                    }
-//                }
-//            });
-//        }
-//
-//        IUiListener qqShareListener = new IUiListener() {
-//            @Override
-//            public void onCancel() {
-//                Util.toastMessage(AddContent.this, "onCancel: ");
-//            }
-//
-//            @Override
-//            public void onComplete(Object response) {
-//                // TODO Auto-generated method stub
-//                Util.toastMessage(AddContent.this, "onComplete: " + response.toString());
-//            }
-//
-//            @Override
-//            public void onError(UiError e) {
-//                // TODO Auto-generated method stub
-//                Util.toastMessage(AddContent.this, "onError: " + e.errorMessage, "e");
-//            }
-//        };
-//                initViews();
-
 //                BaiduOAuth oauthClient = new BaiduOAuth();
 //                oauthClient.startOAuth(AddContent.this, mbApiKey, new String[]{"basic"},new BaiduOAuth.OAuthListener() {
 //                    @Override
@@ -193,7 +134,44 @@ public class AddContent extends Activity implements OnClickListener {
 
     }
 
+    private OnClickListener itemsOnClick = new OnClickListener() {
 
+        public void onClick(View v) {
+//            menuWindow.dismiss();
+            switch (v.getId()) {
+                case R.id.qq:
+                    //点击后PopupWindow消失
+//                    menuWindow.dismiss();
+
+                    //分享到QQ，可以跳转到原生SDK查看QQshare类对参数的说明，注意这里不支持纯文字分享
+//                    final Bundle params = new Bundle();
+////                    params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+//                    params.putString(QQShare.SHARE_TO_QQ_TITLE, ettext.getText().toString());
+////                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "要分享的摘要");
+//                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://www.qq.com/");
+////                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
+////                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,phoneFile + "" );
+//                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "MyNote");
+//                    params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_TYPE_AUDIO);
+//                    mTencent.shareToQQ(AddContent.this, params, new BaseUiListener());
+
+                    //发送纯文字到到我的电脑，详情可以查看http://wiki.open.qq.com/wiki/mobile/API%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E
+                    final Bundle params = new Bundle();
+                    params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, "MyNote");
+//                    params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, ettext.getText().toString());
+                    params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE, GameAppOperation.QQFAV_DATALINE_TYPE_TEXT);
+                    params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, ettext.getText().toString());
+                    mTencent.sendToMyComputer(AddContent.this, params, new BaseUiListener());
+//
+                    break;
+                case R.id.wechat:
+                    menuWindow.dismiss();
+                    break;
+
+            }
+        }
+
+    };
     private class BaseUiListener implements IUiListener {
         @Override
         public void onComplete(Object o) {
@@ -210,23 +188,6 @@ public class AddContent extends Activity implements OnClickListener {
             Toast.makeText(AddContent.this, "onCancel", Toast.LENGTH_LONG).show();
         }
     }
-
-    private OnClickListener itemsOnClick = new OnClickListener() {
-
-        public void onClick(View v) {
-//            menuWindow.dismiss();
-            switch (v.getId()) {
-                case R.id.qq:
-                    menuWindow.dismiss();
-                    // case R.id.btn_pick_photo:
-                    // break;
-                    // default:
-                    // break;
-            }
-
-        }
-
-    };
 
     public void addDB() {
         ContentValues cv = new ContentValues();

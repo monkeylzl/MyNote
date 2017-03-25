@@ -21,7 +21,7 @@ public class SharePopupWindow extends PopupWindow {
 
     private Button  btn_cancel;
     private View mMenuView;
-    private ImageView qq, chat;
+    private ImageView qq, wechat;
 
     public SharePopupWindow(Activity context,OnClickListener itemsOnClick) {
         super(context);
@@ -29,7 +29,7 @@ public class SharePopupWindow extends PopupWindow {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.share, null);
         qq = (ImageView) mMenuView.findViewById(R.id.qq);
-
+        wechat = (ImageView) mMenuView.findViewById(R.id.wechat);
         btn_cancel = (Button) mMenuView.findViewById(R.id.cancel);
         btn_cancel.setOnClickListener(new OnClickListener() {
 
@@ -38,7 +38,7 @@ public class SharePopupWindow extends PopupWindow {
             }
         });
         qq.setOnClickListener(itemsOnClick);
-//        btn_take_photo.setOnClickListener(itemsOnClick);
+        wechat.setOnClickListener(itemsOnClick);
         this.setContentView(mMenuView);
         this.setWidth(LayoutParams.MATCH_PARENT);
         this.setHeight(LayoutParams.WRAP_CONTENT);

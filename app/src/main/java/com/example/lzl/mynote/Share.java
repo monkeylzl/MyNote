@@ -21,7 +21,7 @@ public class Share extends Activity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.share);
         qq = (ImageView) findViewById(R.id.qq);
-        chat = (ImageView) findViewById(R.id.chat);
+        chat = (ImageView) findViewById(R.id.wechat);
         qq.setOnClickListener(this);
         chat.setOnClickListener(this);
     }
@@ -32,7 +32,7 @@ public class Share extends Activity implements OnClickListener{
             case R.id.qq:
                 finish();//添加权限
                 break;
-            case R.id.chat:
+            case R.id.wechat:
                 finish();
                 break;
         }
